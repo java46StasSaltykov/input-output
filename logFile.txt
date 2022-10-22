@@ -1,0 +1,5 @@
+22/10/2022, 19:37 Asia/Jerusalem, ERROR logFile.txt, message: error
+22/10/2022, 19:37 Asia/Jerusalem, WARN logFile.txt, message: warning
+22/10/2022, 19:37 Asia/Jerusalem, INFO logFile.txt, message: info
+22/10/2022, 19:37 Asia/Jerusalem, DEBUG logFile.txt, message: debug
+22/10/2022, 19:37 Asia/Jerusalem, TRACE logFile.txt, message: trace
