@@ -1,65 +1,103 @@
 package telran.util;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
+
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class LoggerTests {
-	
-	File logFile;
+	private static final String LOGGER_FILE = "logFile.txt";
+	Handler handler;
 	Logger logger;
+	BufferedReader reader;
 
 	@BeforeEach
-	void setUp() {
-		logFile = new File("logFile.txt");
-		logFile.delete();
-		logFile = new File("logFile.txt");
-		try {
-			PrintStream printStream = new PrintStream(logFile.getName());
-			
-			Handler handler = new SimpleStreamHandler(printStream);
-			logger = new Logger(handler, logFile.getName());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	void setUp() throws FileNotFoundException {
+		File file = new File(LOGGER_FILE);
+		if (file.exists()) {
+			file.delete();
 		}
-		
+		handler = new SimpleStreamHandler(new PrintStream(file));
+		logger = new Logger(handler, "test-logger");
+		reader = new BufferedReader(new FileReader(file));
+	}
+
+	private void logging() {
+		logger.error("error message");
+		logger.warn("warn message");
+		logger.info("info message");
+		logger.debug("debug message");
+		logger.trace("trace message");
 	}
 
 	@Test
-	void logTest() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(logFile.getName()));
-		logger.error("error");
-		assertTrue(reader.readLine().contains("error"));
-		logger.warn("warning");
-		assertTrue(reader.readLine().contains("warning"));
-		logger.info("info");
-		assertTrue(reader.readLine().contains("info"));
-		logger.debug("debug");
-		assertTrue(reader.readLine().contains("debug"));
-		logger.trace("trace");
-		assertTrue(reader.readLine().contains("trace"));
+	void errorTest() {
+		logger.setLevel(Level.ERROR);
+		logging();
+		String[] levels = { Level.ERROR.toString() };
+		runTestContent(levels);
+
 	}
-	
+
 	@Test
-	void logToConsoleTest() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(logFile.getName()));
-		logger.error("error");
-		logger.warn("warning");
-		logger.info("info");
-		logger.debug("debug");
-		logger.trace("trace");
-		String line = reader.readLine();
-		while (line != null) {
-			System.out.println(line);
-			line = reader.readLine();
+	void warnTest() {
+		logger.setLevel(Level.WARN);
+		logging();
+		String[] levels = { Level.ERROR.toString(), Level.WARN.toString() };
+		runTestContent(levels);
+
+	}
+
+	@Test
+	void infoTest() {
+		logger.setLevel(Level.INFO);
+		logging();
+		String[] levels = { Level.ERROR.toString(), Level.WARN.toString(), Level.INFO.toString() };
+		runTestContent(levels);
+
+	}
+
+	@Test
+	void debugTest() {
+		logger.setLevel(Level.DEBUG);
+		logging();
+		String[] levels = { Level.ERROR.toString(), Level.WARN.toString(), Level.INFO.toString(),
+				Level.DEBUG.toString() };
+		runTestContent(levels);
+
+	}
+
+	@Test
+	void traceTest() {
+		logger.setLevel(Level.TRACE);
+		logging();
+		String[] levels = { Level.ERROR.toString(), Level.WARN.toString(), Level.INFO.toString(),
+				Level.DEBUG.toString(), Level.TRACE.toString() };
+		runTestContent(levels);
+
+	}
+
+	@Test
+	void consoleTest() {
+		handler = new SimpleStreamHandler(System.out);
+		logger = new Logger(handler, "logger-console-test");
+
+		System.out.println("***********************Logger for console******************");
+		System.out.println("******Should contain 3 logger records for ERROR, WARN and INFO levels******************");
+		logging();
+	}
+
+	private void runTestContent(String[] levels) {
+		List<String> records = reader.lines().collect(Collectors.toCollection(ArrayList::new));
+		assertEquals(levels.length, records.size());
+		for (int i = 0; i < levels.length; i++) {
+			assertTrue(records.get(i).contains(levels[i]));
 		}
-		reader.close();
+
 	}
 
 }

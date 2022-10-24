@@ -1,5 +1,5 @@
-22/10/2022, 19:37 Asia/Jerusalem, ERROR logFile.txt, message: error
-22/10/2022, 19:37 Asia/Jerusalem, WARN logFile.txt, message: warning
-22/10/2022, 19:37 Asia/Jerusalem, INFO logFile.txt, message: info
-22/10/2022, 19:37 Asia/Jerusalem, DEBUG logFile.txt, message: debug
-22/10/2022, 19:37 Asia/Jerusalem, TRACE logFile.txt, message: trace
+2022-10-24T18:08:05.614562500 ERROR test-logger error message
+2022-10-24T18:08:05.615032700 WARN test-logger warn message
+2022-10-24T18:08:05.615032700 INFO test-logger info message
+2022-10-24T18:08:05.615032700 DEBUG test-logger debug message
+2022-10-24T18:08:05.615529700 TRACE test-logger trace message
