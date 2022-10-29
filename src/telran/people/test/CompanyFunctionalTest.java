@@ -13,7 +13,6 @@ import telran.people.Employee;
 
 import java.io.*;
 import java.util.*;
-
 class CompanyFunctionalTest {
 
 	private static final String TEST_DATA_FILE = "company-test.data";
@@ -29,17 +28,17 @@ class CompanyFunctionalTest {
 	static Employee empl2 = new Employee(ID + 1, "name1", DEPARTMENT1, SALARY1);
 	static Employee empl3 = new Employee(ID + 2, "name1", DEPARTMENT2, SALARY3);
 	static Employee empl4 = new Employee(ID + 3, "name1", DEPARTMENT2, SALARY4);
-	static Employee allEmployees[] = { empl1, empl2, empl3, empl4 };
-
+	static Employee allEmployees[] = {empl1, empl2, empl3, empl4};
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		file = new File(TEST_DATA_FILE);
 		company = CompanyImpl.createCompany(TEST_DATA_FILE);
-		for (Employee empl : allEmployees) {
+		for(Employee empl: allEmployees) {
 			company.addEmployee(empl);
 		}
 		company.save(TEST_DATA_FILE);
-
+		
+		
 	}
 
 	@AfterAll
@@ -49,7 +48,7 @@ class CompanyFunctionalTest {
 
 	@Test
 	void addExistedTest() {
-		assertThrows(Exception.class, () -> company.addEmployee(empl1));
+		assertThrows(Exception.class, ()->company.addEmployee(empl1));
 	}
 
 	@Test
@@ -57,42 +56,38 @@ class CompanyFunctionalTest {
 		assertEquals(empl1, company.getEmployee(ID));
 		assertNull(company.getEmployee(-1));
 	}
-
 	@Test
 	void getAllEmployees() {
 		runArrayIterableTest(allEmployees, company.getAllEmployees());
 	}
-
 	private void runArrayIterableTest(Employee[] array, Iterable<Employee> iterable) {
 		int index = 0;
 		Set<Employee> setEmployees = new HashSet<>(Arrays.asList(array));
-		for (Employee empl : iterable) {
+		for(Employee empl: iterable) {
 			assertTrue(setEmployees.contains(empl));
 			index++;
 		}
 		assertEquals(array.length, index);
-
+		
 	}
 
 	@Test
 	void getEmployeesSalary() {
-		Employee[] expected = { empl1, empl2, empl3 };
+		Employee[] expected = {empl1, empl2, empl3};
 		runArrayIterableTest(expected, company.getEmployeesSalary(SALARY1, SALARY3));
 		Employee[] expectedEmpty = {};
 		runArrayIterableTest(expectedEmpty, company.getEmployeesSalary(1, 2));
 	}
-
 	@Test
 	void getEmployeesDepartment() {
-		Employee[] expected = { empl1, empl2 };
+		Employee[] expected = {empl1, empl2};
 		runArrayIterableTest(expected, company.getEmployeesDepartment(DEPARTMENT1));
 		Employee[] expectedEmpty = {};
 		runArrayIterableTest(expectedEmpty, company.getEmployeesDepartment("xxx"));
-
+		
 	}
-
 	@Test
-	void saveRestore() throws Exception {
+	void saveRestore() throws Exception{
 		Company savedCompany = CompanyImpl.createCompany(TEST_DATA_FILE);
 		assertIterableEquals(company.getAllEmployees(), savedCompany.getAllEmployees());
 	}

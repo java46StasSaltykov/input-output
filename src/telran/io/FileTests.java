@@ -87,7 +87,7 @@ class FileTests {
 	@Test
 	void printStreamTest() throws Exception {
 		try (PrintStream printStream = new PrintStream("file1.txt");
-			 BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));) {
+				BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));) {
 			printStream.println("Hello");
 			assertEquals("Hello", reader.readLine());
 		}
@@ -97,7 +97,7 @@ class FileTests {
 	@Test
 	void printWriterTest() throws Exception {
 		try (PrintWriter printWriter = new PrintWriter("file1.txt");
-			 BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));) {
+				BufferedReader reader = new BufferedReader(new FileReader("file1.txt"));) {
 			printWriter.println("Hello");
 			printWriter.flush();
 			assertEquals("Hello", reader.readLine());
