@@ -16,7 +16,7 @@ import java.util.*;
 
 class CompanyFunctionalTest {
 
-	private static final String TEST_DATA_FILE = "employees-test.data";
+	private static final String TEST_DATA_FILE = "company-test.data";
 	private static final String DEPARTMENT1 = "department1";
 	private static final String DEPARTMENT2 = "department2";
 	private static final int SALARY1 = 10000;
@@ -55,6 +55,7 @@ class CompanyFunctionalTest {
 	@Test
 	void getEmployee() {
 		assertEquals(empl1, company.getEmployee(ID));
+		assertNull(company.getEmployee(-1));
 	}
 
 	@Test
